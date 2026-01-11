@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Case Study: Business Impact Analysis</title>
+    <style>
+        /* --- EXACT STYLING AS REQUESTED --- */
+        /* General Reset and Body Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212; /* Dark background to match screenshots */
+            color: #e0e0e0;
+            line-height: 1.6;
+            padding-top: 60px; /* Space for fixed header */
+            scroll-behavior: smooth;
+        }
+
+        /* Header and Progress Bar */
+        .header-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background-color: #000;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .header-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+            z-index: 1001;
+            margin-right: 20px;
+        }
+
+        .progress-container {
+            flex-grow: 1;
+            height: 6px;
+            background-color: #333;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: #ff4444; /* Red to match the "critique" theme */
+            width: 0%;
+            transition: width 0.3s ease-out;
+            border-radius: 3px;
+        }
+
+        /* Main Content Layout */
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Intro Section */
+        .intro {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 20px;
+            background: #1e1e1e;
+            border-radius: 8px;
+            border-left: 5px solid #ff4444;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease-out 0.5s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .intro h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #fff;
+            animation: fadeInText 1.2s ease-out 0.8s both;
+        }
+
+        @keyframes fadeInText {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .intro p {
+            color: #aaa;
+            font-size: 1.1rem;
+            animation: fadeInText 1.2s ease-out 1s both;
+        }
+
+        /* Card Style for Each Case Study Item */
+        .case-study-item {
+            background-color: #1e1e1e;
+            margin-bottom: 60px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            border: 1px solid #333;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .case-study-item.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .case-study-item:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: #ff4444;
+        }
+
+        .item-header {
+            padding: 20px 25px;
+            background-color: #252525;
+            border-bottom: 1px solid #333;
+        }
+
+        .item-header h2 {
+            font-size: 1.5rem;
+            color: #fff;
+        }
+
+        .item-header .tag {
+            display: inline-block;
+            background-color: #ff4444;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .image-container {
+            width: 100%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: opacity 0.5s ease;
+            opacity: 0;
+        }
+
+        .image-container img.loaded {
+            opacity: 1;
+        }
+
+        .analysis-content {
+            padding: 25px;
+        }
+
+        .analysis-content h3 {
+            color: #ff4444;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .analysis-content ul {
+            list-style-type: none;
+        }
+
+        .analysis-content li {
+            margin-bottom: 15px;
+            padding-left: 20px;
+            border-left: 3px solid #555;
+            color: #ccc;
+        }
+
+        .analysis-content strong {
+            color: #fff;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* --- STYLING FOR EXTRA SECTIONS --- */
+        
+        /* Summary Section */
+        .summary-section {
+            background-color: #1e1e1e;
+            margin-bottom: 60px;
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            border-left: 5px solid #ff4444;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease-out 1.5s forwards;
+        }
+        .summary-section h2 {
+            color: #fff;
+            margin-bottom: 10px;
+            animation: slideInLeft 0.8s ease-out 1.7s both;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        .summary-section p {
+            color: #aaa;
+            margin-bottom: 20px;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        @media(min-width: 768px) { .summary-grid { grid-template-columns: 1fr 1fr; } }
+        .summary-item h4 {
+            color: #fff;
+            margin-bottom: 5px;
+        }
+        .summary-item p {
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* Suggestions Section */
+        .suggestion-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 60px;
+        }
+        @media(min-width: 768px) { .suggestion-grid { grid-template-columns: 1fr 1fr; } }
+        
+        .suggestion-card {
+            background-color: #1e1e1e;
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .suggestion-card.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .suggestion-card:hover {
+            border-color: #4caf50;
+            transform: translateY(-5px);
+        }
+        .suggestion-card h4 {
+            color: #fff;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .check-icon {
+            color: #4caf50; /* Green for suggestion */
+            margin-right: 10px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+        .suggestion-card p {
+            color: #ccc;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background-color: #1e1e1e;
+            margin-bottom: 60px;
+            padding: 40px 20px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease-out 3.5s forwards;
+        }
+        .cta-section h2 {
+            color: #fff;
+            margin-bottom: 15px;
+            animation: slideInLeft 0.8s ease-out 3.7s both;
+        }
+        .cta-list {
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+            color: #ccc;
+        }
+        .cta-list div {
+            margin-bottom: 10px;
+            padding-left: 15px;
+            border-left: 2px solid #ff4444;
+        }
+        .cta-btn {
+            display: inline-block;
+            background-color: #ff4444;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .cta-btn:hover::before {
+            left: 100%;
+        }
+
+        .cta-btn:hover {
+            background-color: #d32f2f;
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #333;
+            margin-top: 50px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease-out 4s forwards;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .header-container {
+                flex-direction: column;
+                height: auto;
+                padding: 10px;
+            }
+            .header-title {
+                margin-bottom: 10px;
+                font-size: 1rem;
+            }
+            .progress-container {
+                width: 100%;
+            }
+            body {
+                padding-top: 80px;
+            }
+            .intro h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Progress Bar Header -->
+    <div class="header-container">
+        <div class="header-title">UX Audit: Soni & Soni</div>
+        <div class="progress-container">
+            <div class="progress-bar" id="myBar"></div>
+        </div>
+    </div>
+
+    <main>
+        <!-- Intro (Old Content) -->
+        <div class="intro">
+            <h1>Strong Legal Expertise,<br>Weak Digital Presence</h1>
+            <p>A precise analysis of visual and functional defects impacting business growth and professional trust.</p>
+        </div>
+
+        <!-- Dynamic Reviews Container -->
+        <div id="reviews-container"></div>
+
+        <!-- SECTION 1: SUMMARY (Audit) -->
+        <section class="summary-section">
+            <h2>Summary: Areas of Concern</h2>
+            <p>Your site has more flaws that require attention across these key areas:</p>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <h4>Other Pages</h4>
+                    <p>We've only analyzed select sections here. A comprehensive audit of your About Us, Services detail pages, Contact page, and blog sections would likely reveal additional inconsistencies in navigation and content structure.</p>
+                </div>
+                <div class="summary-item">
+                    <h4>Mobile Responsiveness</h4>
+                    <p>Throughout our analysis, we've identified numerous layouts that will break or become unusable on mobile devices. With mobile traffic representing the majority, this is a critical gap affecting accessibility.</p>
+                </div>
+                <div class="summary-item">
+                    <h4>Content Strategy</h4>
+                    <p>The site suffers from inconsistent messaging and generic copy that doesn't differentiate your firm. Content needs restructuring to speak directly to user needs and guide them toward conversion.</p>
+                </div>
+                <div class="summary-item">
+                    <h4>Performance & Technical</h4>
+                    <p>Page load times, image optimization, code structure, and SEO implementation haven't been evaluated here but are equally important to overall user experience and site success.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: SUGGESTIONS -->
+        <div style="text-align: center; margin-bottom: 20px;">
+            <h2 style="color: #fff;">Our Suggestions</h2>
+        </div>
+        <div class="suggestion-grid" id="suggestions-container">
+            <!-- Populated by JS -->
+        </div>
+
+        <!-- SECTION 3: CTA -->
+        <section class="cta-section">
+            <h2>Next Steps: Let's Talk</h2>
+            <p style="color: #aaa; margin-bottom: 20px;">We've identified significant opportunities to improve your site's user experience, conversion rate, and overall effectiveness.</p>
+            
+            <div class="cta-list">
+                <div><span>•</span> Walk through specific examples and solutions in depth</div>
+                <div><span>•</span> Understand your business goals and audience better</div>
+                <div><span>•</span> Show how changes impact behavior and conversions</div>
+                <div><span>•</span> Provide actionable recommendations tailored to you</div>
+            </div>
+            
+            <!-- Updated Email and CTA Text -->
+            <a href="mailto:inoit.tech@gmail.com" class="cta-btn">Let's turn your website into your strongest asset</a>
+            <div style="margin-top: 15px; font-size: 0.9rem; color: #666;">
+                Reach us directly at <a href="mailto:inoit.tech@gmail.com" style="color: #ff4444; font-weight: bold;">inoit.tech@gmail.com</a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Updated Footer Text -->
+    <footer>
+        <p>&copy; 2026 Soni & Soni Design Case Study Analysis • Audited By Inoit</p>
+    </footer>
+
+    <script>
+        // --- FULL CONTENT DATA ---
+        const AUDIT_DATA = [
+            {
+                tag: "Slide 1",
+                title: "Hero Section",
+                subtitle: "Topic: First Impressions & Trust",
+                img: "images/1. soni hero.jfif",
+                impacts: [
+                    "<strong>Loss of Credibility:</strong> In the legal industry, trust is currency. A \"lifeless\" hero section makes the firm look outdated or inexperienced, causing potential clients to doubt your expertise before they even read your services.",
+                    "<strong>High Bounce Rate:</strong> If the navigation is inconsistent or confusing, users cannot find what they are looking for. They will leave the site within seconds and go to a competitor with a cleaner interface.",
+                    "<strong>Missed Emotional Connection:</strong> Using a vague stock image fails to humanize your brand. Clients want to see real people they can trust; a generic image creates a barrier, reducing the likelihood of them reaching out for a consultation."
+                ]
+            },
+            {
+                tag: "Slide 2",
+                title: "\"Why Choose Us\" Section",
+                subtitle: "Topic: Value Proposition & User Retention",
+                img: "images/2. soni choose.jfif",
+                impacts: [
+                    "<strong>Failure to Differentiate:</strong> A generic title like \"Why Choose Us\" without compelling typography or visual dominance makes you look exactly like every other competitor. If users can't see your unique value immediately, they will choose the firm that offers a clearer, stronger promise.",
+                    "<strong>User Fatigue:</strong> Without visual hierarchy, the user’s eye doesn't know where to land. This causes \"cognitive load,\" making the brain work harder to understand the text. Frustrated users will not read about your \"Superfast\" services; they will simply click away.",
+                    "<strong>Perceived Low Value:</strong> Poor typography and placement subconsciously signal that the service quality is also \"cheap\" or low-effort."
+                ]
+            },
+            {
+                tag: "Slide 3",
+                title: "Service Triangle",
+                subtitle: "Topic: Mobile Usability & Cross-Device Loss",
+                img: "images/3. soni triangle.png",
+                impacts: [
+                    "<strong>Losing 50% of Traffic:</strong> Since a vast majority of users browse on mobile, a \"not mobile oriented\" design means you are actively blocking half your potential client base. The complex triangle likely breaks on small screens, making the content unreadable.",
+                    "<strong>Confusion Kills Conversions:</strong> If the connection between \"Attorney,\" \"Service,\" and \"Consultation\" is \"laggy and confusing,\" the user doesn't understand the process. A confused customer never buys; they will fear a complex legal process and look for a simpler solution elsewhere.",
+                    "<strong>Accessibility Issues:</strong> Low contrast text makes your site inaccessible to people with visual impairments, alienating a segment of potential clients and risking compliance issues."
+                ]
+            },
+            {
+                tag: "Slide 4",
+                title: "IP Protection Section",
+                subtitle: "Topic: Brand Authority & Attention to Detail",
+                img: "images/4. soni ip.png",
+                impacts: [
+                    "<strong>Immediate Loss of Trust:</strong> This is critical. You are an Intellectual Property firm; attention to detail is your product. A spelling error in the word \"Patents\" signals that you might make mistakes with *their* legal documents too. It destroys professional authority instantly.",
+                    "<strong>Damaged Reputation:</strong> Clients will screenshot this error and share it. It makes the firm look careless and unprofessional.",
+                    "<strong>Mobile Drop-offs:</strong> If the text overflows or breaks on mobile devices (as indicated by the annotations), users will struggle to read your value proposition and leave the site prematurely."
+                ]
+            },
+            {
+                tag: "Slide 5",
+                title: "Service Cards",
+                subtitle: "Topic: Conversion & Actionability",
+                img: "images/5. soni service.png",
+                impacts: [
+                    "<strong>Dead Traffic:</strong> If the \"Read More\" buttons have low contrast, users literally cannot find the next step. They want to learn more, but you aren't giving them a clear button to click. This results in zero engagement from interested visitors.",
+                    "<strong>Lack of Visual Breathing Room:</strong> Poor spacing makes the content look cluttered and \"cheap.\" Users associate cluttered design with spammy or low-quality services.",
+                    "<strong>Reduced Click-Through Rate (CTR):</strong> Even if the user reads the text, without a visually distinct call-to-action, they are unlikely to click through to the detailed service pages, directly killing lead generation."
+                ]
+            },
+            {
+                tag: "Slide 6",
+                title: "Roadmap 1",
+                subtitle: "Topic: User Experience (UX) & Professionalism",
+                img: "images/6. soni road1.png",
+                impacts: [
+                    "<strong>\"Empty\" vs. \"Minimalist\":</strong> There is a difference. \"Too much unused empty space\" makes the website look broken, incomplete, or like a template that wasn't finished. It signals to the client that the business might not be active or substantial.",
+                    "<strong>Disjointed User Journey:</strong> A lack of continuity confuses the user about where to scroll next. This breaks the storytelling flow, causing users to lose interest in the \"Startup\" or \"Incubation\" services before they understand them.",
+                    "<strong>Wasted Real Estate:</strong> You are paying for this digital space, but it isn't working for you. It should be building trust or highlighting stats, not sitting empty."
+                ]
+            },
+            {
+                tag: "Slide 7",
+                title: "Roadmap 2",
+                subtitle: "Topic: Trust Signals & Data Credibility",
+                img: "images/7. soni road2.png",
+                impacts: [
+                    "<strong>No Social Proof:</strong> Legal services rely on trust. The annotation says \"stats must include to gain trust.\" Without numbers (e.g., \"500+ Cases Won,\" \"98% Success Rate\"), clients have no data to validate your expertise. They will choose a competitor who proves their worth with numbers.",
+                    "<strong>Failure to Persuade:</strong> Effective minimalism guides the eye; this is just empty space. Without visual focus, the user skips over important modules like \"Litigation Support,\" missing out on high-value services.",
+                    "<strong>Missed Authority Building:</strong> A lack of typography hierarchy means your \"Startup\" support modules don't feel authoritative. Clients want a partner who looks established and data-driven."
+                ]
+            },
+            {
+                tag: "Slide 8",
+                title: "Roadmap 3",
+                subtitle: "Topic: Visual Logic & Clarity",
+                img: "images/8. soni road 3.png",
+                impacts: [
+                    "<strong>Process Breakdown:</strong> The roadmap is supposed to show the user *how* you help them. If the path \"ends abruptly\" or the layout is broken, it metaphorically suggests your legal process is incomplete or unreliable.",
+                    "<strong>Distraction from Value:</strong> Overlapping icons and messy decorations look like noise. They distract the user from reading the actual content about \"IP Protection\" or \"Litigation.\"",
+                    "<strong>User Abandonment:</strong> A layout that looks \"broken\" (cards lost, messy alignment) makes users worry the website has a virus or is glitchy. They will close the tab to protect their device, losing you a lead."
+                ]
+            },
+            {
+                tag: "Slide 9",
+                title: "FAQ Section",
+                subtitle: "Topic: User Frustration & Detail Orientation",
+                img: "images/9. soni faq.png",
+                impacts: [
+                    "<strong>Sign of Negligence:</strong> Incorrect numbering (e.g., two #1s) is a sloppy mistake. For a law firm, this suggests a lack of review processes. If you don't check your website, will you check their contracts?",
+                    "<strong>Harsh User Experience:</strong> Pure black backgrounds with poor text contrast can cause eye strain. If the FAQ is painful to read, users won't find the answers to their objections, and they won't convert.",
+                    "<strong>Increased Support Costs:</strong> If the FAQ is confusing due to bad numbering, clients won't find answers and will email/call support instead, wasting your team's time on basic questions that the website should have answered."
+                ]
+            },
+            {
+                tag: "Slide 10",
+                title: "Footer",
+                subtitle: "Topic: Final Conversion & Brand Cohesion",
+                img: "images/10. soni foot.png",
+                impacts: [
+                    "<strong>Lost \"Last Chance\" Conversions:</strong> The footer is the final opportunity to capture a user. If the CTA is generic (\"Contact us\") and lacks urgency (\"Get Started\"), users will leave thinking \"I'll do this later\" (and never do).",
+                    "<strong>Incoherent Brand Image:</strong> A messy, cluttered footer leaves a lasting negative impression. It ruins the sleek feel you might have built elsewhere, making the brand feel disorganized.",
+                    "<strong>Navigation Dead-Ends:</strong> If the footer links are cluttered or generic, users can't easily navigate to specific services (Patent, Design) when they are ready to buy, leading to a dead end in their customer journey."
+                ]
+            }
+        ];
+
+        const suggestions = [
+            { 
+                title: "Social Proof & Numbers", 
+                desc: "Showcase concrete data: \"500+ Patents Filed\", \"98% Success Rate\". Numbers build credibility instantly." 
+            },
+            { 
+                title: "Strategic CTAs", 
+                desc: "Clear, action-oriented calls-to-action throughout the user journey with multiple conversion paths." 
+            },
+            { 
+                title: "Mobile-First Design", 
+                desc: "Complete redesign with mobile users as the priority, ensuring seamless experiences across devices." 
+            },
+            { 
+                title: "Case Studies", 
+                desc: "Real client examples demonstrating your expertise, process, and results." 
+            },
+            { 
+                title: "Client Testimonials", 
+                desc: "Authentic reviews and video testimonials to reduce decision anxiety." 
+            },
+            { 
+                title: "Cohesive Design System", 
+                desc: "Consistent visual language, typography, and color palette across all pages." 
+            }
+        ];
+
+        // --- RENDER REVIEWS ---
+        function renderReviews() {
+            const container = document.getElementById('reviews-container');
+            
+            AUDIT_DATA.forEach((item) => {
+                const placeholderUrl = `https://placehold.co/800x450/1a1a1a/FFF?text=${encodeURIComponent(item.title)}`;
+                
+                const section = document.createElement('section');
+                section.className = 'case-study-item';
+                
+                // Creating the exact structure from your requested styling
+                section.innerHTML = `
+                    <div class="item-header">
+                        <span class="tag">${item.tag}</span>
+                        <h2>${item.title}</h2>
+                    </div>
+                    <div class="image-container">
+                        <!-- REPLACE src WITH YOUR ACTUAL IMAGE FILE -->
+                        <img src="${item.img}" alt="${item.title}" onerror="this.onerror=null;this.src='${placeholderUrl}';">
+                    </div>
+                    <div class="analysis-content">
+                        <h3>Business Impact</h3>
+                        <ul>
+                            ${item.impacts.map(impact => `<li>${impact}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+                container.appendChild(section);
+            });
+        }
+
+        // --- RENDER SUGGESTIONS ---
+        function renderSuggestions() {
+            const container = document.getElementById('suggestions-container');
+            suggestions.forEach(sug => {
+                const div = document.createElement('div');
+                div.className = 'suggestion-card';
+                div.innerHTML = `
+                    <h4><span class="check-icon">✓</span> ${sug.title}</h4>
+                    <p>${sug.desc}</p>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // --- PROGRESS BAR LOGIC ---
+        window.onscroll = function() {
+            var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            var scrolled = (winScroll / height) * 100;
+            document.getElementById("myBar").style.width = scrolled + "%";
+        };
+
+        // --- INIT ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderReviews();
+            renderSuggestions();
+            
+            // Add image load animations
+            const images = document.querySelectorAll('.image-container img');
+            images.forEach(img => {
+                if (img.complete) {
+                    img.classList.add('loaded');
+                } else {
+                    img.addEventListener('load', () => {
+                        img.classList.add('loaded');
+                    });
+                }
+            });
+
+            // Scroll-triggered animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.classList.add('animate');
+                        }, index * 150); // Stagger animations
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all animated elements
+            const animatedElements = document.querySelectorAll('.case-study-item, .suggestion-card');
+            animatedElements.forEach(el => observer.observe(el));
+        });
+
+    </script>
+</body>
+</html>
